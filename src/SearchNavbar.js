@@ -15,6 +15,7 @@ export default function SearchNavbar(props){
             </BS.Navbar.Brand>
             <BS.Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <BS.Navbar.Collapse id="responsive-navbar-nav">
+                {/* <BS.Form.Switch id="xd" label=""/> */}
 
                 <BS.Form inline className="ml-auto" onSubmit={(e) => {
                     e.preventDefault();
