@@ -8,18 +8,18 @@ import { Sun } from "react-bootstrap-icons";
 
 import SearchNavbar from "./SearchNavbar.js";
 import AdvancedSearchWindow from "./AdvancedSearchWindow.js";
-
-
-
 import { ErrorBox, ErrorToast } from "./ErrorToast.js";
+import WeatherTileCurrent from "./weatherTileCurrent.js";
+import { getWeatherIconByOpenWeatherName } from "./weatherTileCurrent.js";
+
+import moment from "moment";
 
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			units: "metric",
 			location_name: "",
-			lat: 49.75,
-			lon: 20.45,
 			weather_data: undefined,
 			location_data: undefined,
 			temp_location_data: undefined,
@@ -41,7 +41,11 @@ class App extends React.Component {
 		this.handleAdvanceSearchChoiceChange = this.handleAdvanceSearchChoiceChange.bind(this);
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		//for debugging purpose
+		// await this.handleLocationSearchChange("Ujanowice, Limanowa");
+		await this.handleLocationSearchChange("Warmątowice Sienkiewiczowskie");
+		this.handleLocationSearchSubmit();
 	}
 
 	handleLocationSearchChange(new_value) {
@@ -105,8 +109,9 @@ class App extends React.Component {
 	}
 
 	fetchWeatherData() {
+		console.log((`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`))
 		this.setState({ loading_weather_data: true }, () => {
-			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}`)
+			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`)
 				.then(response => {
 					if (response.ok) {
 						return response.json();
@@ -168,6 +173,7 @@ class App extends React.Component {
 	}
 
 	render() {
+		const user_timezone_offset = (new Date()).getTimezoneOffset() * 60;
 		return (
 			<>
 				<SearchNavbar
@@ -200,27 +206,47 @@ class App extends React.Component {
 
 
 				{
-					this.state.loading_weather_data === true
+					this.state.loading_weather_data === true || this.state.weather_data === undefined
 						?
-						
+
 						<div className="d-flex w-100 justify-content-center align-items-center" style={{ height: "calc(100vh - 62px)" }}>
 							<BS.Spinner animation="border" variant="info" size="lg" />
 						</div>
 						:
-						<>
-							<div style={{ whiteSpace: "pre", display: "flex" }}>
-								<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.weather_data, null, 2)}</div>
-								<hr />
-								<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.location_data, null, 2)}</div>
-							</div>
-						</>
-						// <BS.Container fluid>
-						// 	<BS.Row>
-						// 		<BS.Col lg={{span: 8, offset: 2}} md={{span: 10, offset: 1}}>
-						// 			<WeatherTileCurrent weatherData={this.state.weather_data}/>
-						// 		</BS.Col>
-						// 	</BS.Row>
-						// </BS.Container>
+						// <>
+						// 	<div style={{ whiteSpace: "pre", display: "flex" }}>
+						// 		<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.weather_data, null, 2)}</div>
+						// 		<hr />
+						// 		<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.location_data, null, 2)}</div>
+						// 	</div>
+						// </>
+
+
+
+
+						<BS.Container fluid>
+							<BS.Row>
+								<BS.Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }}>
+									<WeatherTileCurrent
+										units={this.state.units}
+										hour={moment(new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("HH:mm")}
+										date={moment(new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("DD/MM/YYYY")}
+										humidity={this.state.weather_data.current.humidity}
+										temperature={this.state.weather_data.current.temp}
+										pressure={this.state.weather_data.current.pressure}
+										feelsLike={this.state.weather_data.current.feels_like}
+										sunsetTime={moment(new Date((this.state.weather_data.current.sunset + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("HH:mm")}
+										sunriseTime={moment(new Date((this.state.weather_data.current.sunrise + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("HH:mm")}
+										windSpeed={this.state.weather_data.current.wind_speed}
+										windDegree={this.state.weather_data.current.wind_deg}
+										icon={getWeatherIconByOpenWeatherName(this.state.weather_data.current.weather[0].icon)}
+										description={(s => (s[0].toUpperCase() + s.slice(1)))(this.state.weather_data.current.weather[0].description)}
+										placeShort={this.state.location_data.display_name.split(',')[0]}
+										placeLong={this.state.location_data.display_name}
+									/>
+								</BS.Col>
+							</BS.Row>
+						</BS.Container>
 				}
 			</>);
 	}
