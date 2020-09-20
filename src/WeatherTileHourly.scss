@@ -1,0 +1,43 @@
+@import "~bootstrap/scss/bootstrap";
+
+
+$green: rgb(0, 255, 127);
+.btn-green {
+    @include button-variant($green, darken($green, 7.5%), darken($green, 10%), lighten($green,5%), lighten($green, 10%), darken($green,20%));
+}
+.btn-outline-green {
+        @include button-outline-variant($green, white, lighten($green,5%), $green);
+}
+
+
+$red: rgb(255, 3, 62);
+.btn-red {
+    @include button-variant($red, darken($red, 7.5%), darken($red, 10%), lighten($red,5%), lighten($red, 10%), darken($red,20%));
+}
+.btn-outline-red {
+    @include button-outline-variant($red, white, lighten($red,5%), $red);
+}
+
+
+$aqua: rgb(46, 149, 180);
+.btn-aqua {
+    @include button-variant($aqua, darken($aqua, 7.5%), darken($aqua, 10%), lighten($aqua,5%), lighten($aqua, 10%), darken($aqua,20%));
+}
+.btn-outline-aqua {
+    @include button-outline-variant($aqua, white, lighten($aqua,5%), $aqua);
+}
+
+
+$silver: rgb(118, 119, 123);
+.btn-silver {
+    @include button-variant($silver, darken($silver, 7.5%), darken($silver, 10%), lighten($silver,5%), lighten($silver, 10%), darken($silver,20%));
+}
+.btn-outline-silver {
+    @include button-outline-variant($silver, white, lighten($silver,5%), $silver);
+}
+
+
+
+
+
+

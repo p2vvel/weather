@@ -4,15 +4,17 @@ import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import *as BS from "react-bootstrap";
 import { Sun } from "react-bootstrap-icons";
+import moment from "moment";
 
 
 import SearchNavbar from "./SearchNavbar.js";
 import AdvancedSearchWindow from "./AdvancedSearchWindow.js";
 import { ErrorBox, ErrorToast } from "./ErrorToast.js";
-import WeatherTileCurrent from "./weatherTileCurrent.js";
-import { getWeatherIconByOpenWeatherName } from "./weatherTileCurrent.js";
 
-import moment from "moment";
+import WeatherTileCurrent from "./WeatherTileCurrent.js";
+import { getWeatherIconByOpenWeatherName } from "./WeatherTileCurrent.js";
+
+import WeatherTileHourly from "./WeatherTileHourly.js";
 
 class App extends React.Component {
 	constructor(props) {
@@ -43,8 +45,8 @@ class App extends React.Component {
 
 	async componentDidMount() {
 		//for debugging purpose
-		// await this.handleLocationSearchChange("Ujanowice, Limanowa");
-		await this.handleLocationSearchChange("Warmątowice Sienkiewiczowskie");
+		await this.handleLocationSearchChange("Ujanowice, Limanowa");
+		// await this.handleLocationSearchChange("Warmątowice Sienkiewiczowskie");
 		this.handleLocationSearchSubmit();
 	}
 
@@ -222,7 +224,16 @@ class App extends React.Component {
 						// </>
 
 
-
+						// <WeatherTileHourly
+						// 	data={this.state.weather_data.hourly.slice(0, 24).map(d => ({
+						// 		temperature: d.temp,
+						// 		humidity: d.humidity,
+						// 		pressure: d.pressure,
+						// 		wind_speed: d.wind_speed,
+						// 		time: new Date((d.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000),
+						// 	}))}
+						// 	currentTime={new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)}
+						// />
 
 						<BS.Container fluid>
 							<BS.Row>
@@ -243,6 +254,20 @@ class App extends React.Component {
 										description={(s => (s[0].toUpperCase() + s.slice(1)))(this.state.weather_data.current.weather[0].description)}
 										placeShort={this.state.location_data.display_name.split(',')[0]}
 										placeLong={this.state.location_data.display_name}
+									/>
+								</BS.Col>
+							</BS.Row>
+							<BS.Row>
+								<BS.Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }}>
+									<WeatherTileHourly
+										data={this.state.weather_data.hourly.slice(0, 24).map(d => ({
+											temperature: d.temp,
+											humidity: d.humidity,
+											pressure: d.pressure,
+											wind_speed: d.wind_speed,
+											time: new Date((d.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000),
+										}))}
+										currentTime={new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)}
 									/>
 								</BS.Col>
 							</BS.Row>
