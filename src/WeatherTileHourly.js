@@ -63,8 +63,6 @@ class WeatherTileHourly extends React.Component {
 	async updateDataset(dataset_index) {
 		this.chart_ref.current.style.minHeight = `${this.chart_ref.current.offsetHeight}px`;
 
-		console.log(this.chart_ref.current.style.minHeight, this.chart_ref.current.offsetHeight);
-
 		this.chart.destroy();
 		this.chart = this.createNewChart(dataset_index);
 		this.chart.render();

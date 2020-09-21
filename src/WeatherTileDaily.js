@@ -11,7 +11,6 @@ import { getWindIcon } from "./WeatherUtils.js"
 
 
 function WeatherTileDaily(props) {
-    console.log(props);
     const metrical_units = props.units !== "imperial";
     const windSpeedUnits = metrical_units ? "m/s" : "mi/h";
     const tempUnits = metrical_units ? "°C" : "°F";
@@ -32,14 +31,8 @@ function WeatherTileDaily(props) {
                     </div>
                 </div>
                 <div className="w-100">
-
-
-                    <p><i className="wi wi-showers mx-1" />{(props.rainProbability * 100) + "%"}</p>
+                    <p><i className="wi wi-showers mx-1" />{(props.rainProbability * 100).toFixed(0) + "%"}</p>
                     <p><i className="wi wi-barometer mx-1" />{props.pressure + "hPa"}</p>
-
-
-
-
                     <p>
                         <BS.OverlayTrigger placement="left" overlay={<BS.Tooltip >{props.windDegree + '°'}</BS.Tooltip>}>
                             {getWindIcon(props.windDegree)}

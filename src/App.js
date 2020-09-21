@@ -113,7 +113,7 @@ class App extends React.Component {
 	}
 
 	fetchWeatherData() {
-		console.log((`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`))
+		// console.log((`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`))
 		this.setState({ loading_weather_data: true }, () => {
 			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`)
 				.then(response => {
@@ -258,7 +258,7 @@ class App extends React.Component {
 								<BS.Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }}>
 									<BS.Row>
 										{this.state.weather_data.daily.map((d, i) => (
-											<BS.Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 3 }} >
+											<BS.Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 3 }} key={i}>
 												<WeatherTileDaily
 													units={this.state.units}
 													date={i === 0 ? "Today" : moment(new Date((d.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("DD/MM/YYYY")}
