@@ -34,6 +34,8 @@ class App extends React.Component {
 				chosen_record_index: 0
 			},
 			errors: [],
+			time_difference: 0,	//defines difference between system time and time fetched from API
+			current_time: 0,
 		};
 		this.apiKeyWeather = this.props.apiKeyWeather || "15b95f471ae2dd3c0058c7bf468339ec";
 		this.apiKeyLocation = this.props.apiKeyLocation || "c89c35523d4ee9";
@@ -43,6 +45,11 @@ class App extends React.Component {
 		this.handleAdvanceSearchCancel = this.handleAdvanceSearchCancel.bind(this);
 		this.handleAdvanceSearchSubmit = this.handleAdvanceSearchSubmit.bind(this);
 		this.handleAdvanceSearchChoiceChange = this.handleAdvanceSearchChoiceChange.bind(this);
+
+		this.clock_interval = setInterval(() =>{
+			if(this.state.weather_data!== undefined) 
+				this.setState(state => ({ current_time: new Date((new Date()).getTime() - state.time_difference)}))
+	}, 1000);
 	}
 
 	async componentDidMount() {
@@ -50,6 +57,10 @@ class App extends React.Component {
 		await this.handleLocationSearchChange("Ujanowice, Limanowa");
 		// await this.handleLocationSearchChange("Warmątowice Sienkiewiczowskie");
 		this.handleLocationSearchSubmit();
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.clock_interval);
 	}
 
 	handleLocationSearchChange(new_value) {
@@ -126,7 +137,9 @@ class App extends React.Component {
 				})
 				.then(data => this.setState({
 					weather_data: data,
-					loading_weather_data: false
+					loading_weather_data: false,
+					time_difference: (new Date()).getTime() - ((data.current.dt + data.timezone_offset + ((new Date()).getTimezoneOffset() * 60)) * 1000),
+					current_time: new Date((data.current.dt + data.timezone_offset + ((new Date()).getTimezoneOffset() * 60)) * 1000),
 				}))
 				.catch(error => {
 					console.log("Weather API error: " + error.message);
@@ -223,8 +236,8 @@ class App extends React.Component {
 								<BS.Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }}>
 									<WeatherTileCurrent
 										units={this.state.units}
-										hour={moment(new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("HH:mm")}
-										date={moment(new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("DD/MM/YYYY")}
+										hour={moment(this.state.current_time).format("HH:mm")}
+										date={moment(this.state.current_time).format("DD/MM/YYYY")}
 										humidity={this.state.weather_data.current.humidity}
 										temperature={this.state.weather_data.current.temp}
 										pressure={this.state.weather_data.current.pressure}
