@@ -14,11 +14,18 @@ export default function AdvancedSearchWindow(props){
                 <BS.Modal.Body>
 
                     <BS.InputGroup className="my-2">
-                        <BS.FormControl type="text" placeholder="Choose location..." value={props.searchValue} onChange={e => {
-                            props.onSearchChange(e.target.value);
-                        }} />
+                        <BS.FormControl type="text" placeholder="Choose location..." value={props.searchValue} 
+                        onChange={e => {
+                            props.onSearchChange(e.target.value); 
+                        }} 
+                        onKeyPress={e => {
+                            if(e.key  === "Enter")
+                                props.onSearchSubmit();
+                        }}/>
+                        
                         {
-                            props.searchValue === "" ||
+                            props.searchValue === "" 
+                            ||
                             <BS.InputGroup.Append>
                                 <BS.Button className="d-flex align-items-center justify-content-center" variant="outline-warning" onClick={props.onSearchSubmit}>
                                     {
