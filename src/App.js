@@ -12,9 +12,11 @@ import AdvancedSearchWindow from "./AdvancedSearchWindow.js";
 import { ErrorBox, ErrorToast } from "./ErrorToast.js";
 
 import WeatherTileCurrent from "./WeatherTileCurrent.js";
-import { getWeatherIconByOpenWeatherName } from "./WeatherTileCurrent.js";
+import { getWeatherIconByOpenWeatherName } from "./WeatherUtils.js";
 
 import WeatherTileHourly from "./WeatherTileHourly.js";
+
+import WeatherTileDaily from "./WeatherTileDaily.js";
 
 class App extends React.Component {
 	constructor(props) {
@@ -215,25 +217,6 @@ class App extends React.Component {
 							<BS.Spinner animation="border" variant="info" size="lg" />
 						</div>
 						:
-						// <>
-						// 	<div style={{ whiteSpace: "pre", display: "flex" }}>
-						// 		<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.weather_data, null, 2)}</div>
-						// 		<hr />
-						// 		<div style={{ width: "50%", boxSizing: "border-box" }}>{JSON.stringify(this.state.location_data, null, 2)}</div>
-						// 	</div>
-						// </>
-
-
-						// <WeatherTileHourly
-						// 	data={this.state.weather_data.hourly.slice(0, 24).map(d => ({
-						// 		temperature: d.temp,
-						// 		humidity: d.humidity,
-						// 		pressure: d.pressure,
-						// 		wind_speed: d.wind_speed,
-						// 		time: new Date((d.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000),
-						// 	}))}
-						// 	currentTime={new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)}
-						// />
 
 						<BS.Container fluid>
 							<BS.Row>
@@ -269,6 +252,26 @@ class App extends React.Component {
 										}))}
 										currentTime={new Date((this.state.weather_data.current.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)}
 									/>
+								</BS.Col>
+							</BS.Row>
+							<BS.Row>
+								<BS.Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }}>
+									<BS.Row>
+										{this.state.weather_data.daily.map((d, i) => (
+											<BS.Col xs={{ span: 12 }} sm={{ span: 6 }} md={{ span: 4 }} lg={{ span: 3 }} >
+												<WeatherTileDaily
+													units={this.state.units}
+													date={i === 0 ? "Today" : moment(new Date((d.dt + this.state.weather_data.timezone_offset + user_timezone_offset) * 1000)).format("DD/MM/YYYY")}
+													icon={getWeatherIconByOpenWeatherName(d.weather[0].icon)}
+													tempMax={d.temp.max}
+													tempMin={d.temp.min}
+													rainProbability={d.pop}
+													pressure={d.pressure}
+													windSpeed={d.wind_speed}
+													windDegree={d.wind_deg}
+												/>
+											</BS.Col>))}
+									</BS.Row>
 								</BS.Col>
 							</BS.Row>
 						</BS.Container>

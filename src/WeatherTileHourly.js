@@ -76,19 +76,26 @@ class WeatherTileHourly extends React.Component {
 	render() {
 		return (
 			<>
-				<canvas ref={this.chart_ref} id="hourly_chart" ></canvas>
-				<div className="d-flex justify-content-around">
-					<BS.Button size="sm" variant={this.state.current_dataset === this.datasets.temperature ? `green` : `outline-green`} className="text-bolder" onClick={() => this.updateDataset(this.datasets.temperature)}>Temperature</BS.Button>
-					<BS.Button size="sm" variant={this.state.current_dataset === this.datasets.pressure ? `red` : `outline-red`} className="text-bolder" onClick={() => this.updateDataset(this.datasets.pressure)} >Pressure</BS.Button>
-					<BS.Button size="sm" variant={this.state.current_dataset === this.datasets.humidity ? `aqua` : `outline-aqua`} className="text-bolder" onClick={() => this.updateDataset(this.datasets.humidity)}>Humidity</BS.Button>
-					<BS.Button size="sm" variant={this.state.current_dataset === this.datasets.wind ? `silver` : `outline-silver`} className="text-bolder" onClick={() => this.updateDataset(this.datasets.wind)}>Wind speed</BS.Button>
+				<div style={{ width: "100%", minHeight: "300px" }}>
+					<canvas ref={this.chart_ref} id="hourly_chart" ></canvas>
+				</div>
+				<div className="d-flex justify-content-around flex-wrap">
+					<div className="d-flex justify-content-around flex-grow-1">
+						<BS.Button size="sm" className="text-bolder m-1 flex-grow-1" variant={this.state.current_dataset === this.datasets.temperature ? `green` : `outline-green`} onClick={() => this.updateDataset(this.datasets.temperature)}>Temperature</BS.Button>
+						<BS.Button size="sm" className="text-bolder m-1 flex-grow-1" variant={this.state.current_dataset === this.datasets.pressure ? `red` : `outline-red`} onClick={() => this.updateDataset(this.datasets.pressure)} >Pressure</BS.Button>
+
+					</div>
+					<div className="d-flex justify-content-around flex-grow-1">
+						<BS.Button size="sm" className="text-bolder m-1 flex-grow-1" variant={this.state.current_dataset === this.datasets.humidity ? `aqua` : `outline-aqua`} onClick={() => this.updateDataset(this.datasets.humidity)}>Humidity</BS.Button>
+						<BS.Button size="sm" className="text-bolder m-1 flex-grow-1" variant={this.state.current_dataset === this.datasets.wind ? `silver` : `outline-silver`} onClick={() => this.updateDataset(this.datasets.wind)}>Wind speed</BS.Button>
+					</div>
 				</div>
 			</>);
 	}
 
 	chart_options = {
-		// responsive: true,
-		// maintainAspectRatio: false,
+		responsive: true,
+		maintainAspectRatio: false,
 		tooltips: {
 			callbacks: {
 				label: function (tooltipItem, data) {
@@ -131,10 +138,10 @@ class WeatherTileHourly extends React.Component {
 				pointStyle: "circle",
 				pointHitRadius: 30,	//easier to trigger tooltip show
 				radius: 3,
-					// (context) => {
-					// 	const time = context.dataset.data[context.dataIndex].t;
-					// 	return ((time - this.props.currentTime >= 0 && time - this.props.currentTime < 3600000) ? 12 : 3);
-					// },
+				// (context) => {
+				// 	const time = context.dataset.data[context.dataIndex].t;
+				// 	return ((time - this.props.currentTime >= 0 && time - this.props.currentTime < 3600000) ? 12 : 3);
+				// },
 			}
 		}
 	}
