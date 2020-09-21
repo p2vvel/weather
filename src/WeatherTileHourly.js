@@ -18,8 +18,8 @@ class WeatherTileHourly extends React.Component {
 		this.datasets = {
 			temperature: {
 				label: "Temperature",
-				borderColor: "rgba(0, 255, 127, 1)",
-				backgroundColor: "rgba(0, 255, 127, 0.5)",
+				borderColor: "rgba(91, 194, 54, 1)",
+				backgroundColor: "rgba(91, 194, 54,  0.5)",
 				data: this.props.data.map(d => ({ y: d.temperature, t: d.time })),
 			},
 			humidity: {
@@ -61,7 +61,6 @@ class WeatherTileHourly extends React.Component {
 	}
 
 	async updateDataset(dataset_index) {
-		let scroll_pos = window.scrollY;
 		this.chart_ref.current.style.minHeight = `${this.chart_ref.current.offsetHeight}px`;
 
 		console.log(this.chart_ref.current.style.minHeight, this.chart_ref.current.offsetHeight);
@@ -69,8 +68,6 @@ class WeatherTileHourly extends React.Component {
 		this.chart.destroy();
 		this.chart = this.createNewChart(dataset_index);
 		this.chart.render();
-
-		// window.scroll({x: window.scrollX, y: scroll_pos});
 	}
 
 	render() {
