@@ -1,7 +1,7 @@
 @import "~bootstrap/scss/bootstrap";
 
 
-$green: rgb(0, 255, 127);
+$green: #5bc236;
 .btn-green {
     @include button-variant($green, darken($green, 7.5%), darken($green, 10%), lighten($green,5%), lighten($green, 10%), darken($green,20%));
 }
