@@ -1,0 +1,8 @@
+.gps-button{
+    -webkit-filter: brightness(1);
+}
+
+.gps-button:hover{
+    -webkit-filter: brightness(0.8);
+    transform: scale(1.1);
+}
