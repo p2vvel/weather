@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e03ca5690d25b1e512424d8d757521b9",
+    "revision": "6a9e37e25fcef9ab76849097527ca0ad",
     "url": "/weather/index.html"
   },
   {
-    "revision": "fb3b7d8beb3c633249cf",
+    "revision": "f9cad67271635fc07739",
     "url": "/weather/static/css/2.11829350.chunk.css"
   },
   {
-    "revision": "6bb4300a4f1ee3da839d",
-    "url": "/weather/static/css/main.25650df1.chunk.css"
+    "revision": "3fa75308e321888ab6a5",
+    "url": "/weather/static/css/main.0a81f2c3.chunk.css"
   },
   {
-    "revision": "fb3b7d8beb3c633249cf",
-    "url": "/weather/static/js/2.bc050699.chunk.js"
+    "revision": "f9cad67271635fc07739",
+    "url": "/weather/static/js/2.d6ef94f5.chunk.js"
   },
   {
     "revision": "8b81bc38395cca664a526c4e304a6603",
-    "url": "/weather/static/js/2.bc050699.chunk.js.LICENSE.txt"
+    "url": "/weather/static/js/2.d6ef94f5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6bb4300a4f1ee3da839d",
-    "url": "/weather/static/js/main.3d123aee.chunk.js"
+    "revision": "3fa75308e321888ab6a5",
+    "url": "/weather/static/js/main.97a74499.chunk.js"
   },
   {
     "revision": "65a135568c88d392bf25",
@@ -48,7 +48,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/weather/static/media/weathericons-regular-webfont.8cac70eb.woff"
   },
   {
-    "revision": "ed0943f224d6a39871066f569a18fa60",
-    "url": "/weather/static/media/weathericons-regular-webfont.ed0943f2.svg"
+    "revision": "ecaf8b481729b18f6a8494d9f691cdae",
+    "url": "/weather/static/media/weathericons-regular-webfont.ecaf8b48.svg"
   }
 ]);
