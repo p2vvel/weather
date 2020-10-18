@@ -54,6 +54,7 @@ class App extends React.Component {
 		this.handleAdvanceSearchCancel = this.handleAdvanceSearchCancel.bind(this);
 		this.handleAdvanceSearchSubmit = this.handleAdvanceSearchSubmit.bind(this);
 		this.handleAdvanceSearchChoiceChange = this.handleAdvanceSearchChoiceChange.bind(this);
+		this.handleGeolocation = this.handleGeolocation.bind(this);
 
 		this.clock_interval = setInterval(() => {
 			if (this.state.weather_data !== undefined)
@@ -64,10 +65,10 @@ class App extends React.Component {
 	async componentDidMount() {
 		this.getGeolocation()
 			.then(async data => {
-				let place_name = await fetch(`https://us1.locationiq.com/v1/reverse.php?key=${this.apiKeyLocation}&lat=${data.coords.latitude}&lon=${data.coords.longitude}&zoom=12&addressdetails=0&format=json`);
-				place_name = place_name.ok ? (await place_name.json()).display_name : "Your location";	//if fails to get curren locaiton name, then display "Your location"
+				let place_name = (await (await fetch(`https://us1.locationiq.com/v1/reverse.php?key=${this.apiKeyLocation}&lat=${data.coords.latitude}&lon=${data.coords.longitude}&zoom=12&addressdetails=0&format=json`)).json()).display_name;
 
 				this.setState({
+					location_name: place_name.split(',')[0],
 					location_data: {
 						lat: data.coords.latitude,
 						lon: data.coords.longitude,
@@ -76,7 +77,8 @@ class App extends React.Component {
 				}, this.fetchWeatherData);
 			})
 			.catch(async e => {
-				console.log("erro", e);
+				console.log("Error: ", e);
+				this.handleErrorAdd(e.message);
 				await this.handleLocationSearchChange("Ujanowice, Limanowa");
 				this.handleLocationSearchSubmit();
 			})
@@ -86,12 +88,34 @@ class App extends React.Component {
 
 
 
+	async handleGeolocation() {
+		await this.setState({ loading_location_data: true });
+		this.getGeolocation()
+			.then(async data => {
+				let place_name = (await (await fetch(`https://us1.locationiq.com/v1/reverse.php?key=${this.apiKeyLocation}&lat=${data.coords.latitude}&lon=${data.coords.longitude}&zoom=12&addressdetails=0&format=json`)).json()).display_name;
+
+				this.setState({
+					loading_location_data: false,
+					location_name: place_name.split(',')[0],
+					location_data: {
+						lat: data.coords.latitude,
+						lon: data.coords.longitude,
+						display_name: place_name,
+					}
+				}, this.fetchWeatherData);
+			})
+			.catch(err => {
+				console.log(`Error: ${err.message}`);
+				this.handleErrorAdd(err.message);
+			})
+	}
+
 
 
 	getGeolocation() {
 		return new Promise((resolve, reject) => {
 			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 5000});
+				navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
 			}
 			else
 				reject(new Error("Geolocation API not supported"));
@@ -163,7 +187,7 @@ class App extends React.Component {
 	}
 
 	fetchWeatherData() {
-		console.log((`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`))
+		// console.log((`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`))
 		this.setState({ loading_weather_data: true }, () => {
 			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.state.location_data.lat}&lon=${this.state.location_data.lon}&exclude=${"minutely"}&appid=${this.apiKeyWeather}&units=${this.state.units}`)
 				.then(response => {
@@ -238,7 +262,7 @@ class App extends React.Component {
 					onSearchSubmit={this.handleLocationSearchSubmit}
 					isLoadingData={this.state.loading_location_data}
 					searchValue={this.state.location_name}
-					onGeolocation={() => console.log("geo")}
+					onGeolocation={this.handleGeolocation}
 				/>
 
 

@@ -20,8 +20,7 @@ export default function SearchNavbar(props) {
                 {/* <BS.Form.Switch id="xd" label=""/> */}
 
 
-                <GeoAlt size="1.5em" className="ml-auto mr-3 gps-button" color="gold" onClick={props.onGeolocation}/>
-
+                {navigator.geolocation && <GeoAlt size="1.5em" className="ml-auto mr-3 gps-button" color="gold" onClick={props.onGeolocation} />}
 
                 <BS.Form inline onSubmit={(e) => {
                     e.preventDefault();
